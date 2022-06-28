@@ -53,30 +53,31 @@ func Colour(str string, color Pigment) string {
 
 // Log outputs the string with the label and in the color that corresponds to the type
 func Log(logType ServerLog, label string, str string) {
-	fmt.Printf(generateLog(logType, label, str))
+	generateLog(&logType, &label, &str)
+	fmt.Printf(str)
 }
 
 // Logf outputs the resulting string with the label and in the color that corresponds to the type
 func Logf(logType ServerLog, label string, str string, vars ...interface{}) {
+	generateLog(&logType, &label, &str)
 	if logType == 3 {
-		log.Fatalf(generateLog(logType, label, str), vars...)
+		log.Fatalf(str, vars...)
 	}
-	fmt.Printf(generateLog(logType, label, str), vars...)
+	fmt.Printf(str, vars...)
 }
 
-func generateLog(logtype ServerLog, label string, content string) string {
-	logString := fmt.Sprintf("[%s] %s\n", label, content)
-	switch logtype {
+func generateLog(logtype *ServerLog, label *string, str *string) {
+	*str = fmt.Sprintf("[%s] %s\n", *label, *str)
+	switch *logtype {
 	case 0:
-		logString = Color(logString, BLUE)
+		*str = Color(*str, BLUE)
 	case 1:
-		logString = Color(logString, GREEN)
+		*str = Color(*str, GREEN)
 	case 2:
-		logString = Color(logString, YELLOW)
+		*str = Color(*str, YELLOW)
 	case 3:
-		logString = Color(logString, RED)
+		*str = Color(*str, RED)
 	}
-	return logString
 }
 
 // Output is an alias function to output the string in HTML encoding

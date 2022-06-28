@@ -3,6 +3,7 @@ package geeves
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 type HTTPMethod string
@@ -46,50 +47,50 @@ func Static(name string, url string, file string) {
 			Logf(BAD, "Fatal", "Failed to create route with name \"%s\", controller \"%s\" already exists", name, controller.name)
 		}
 	}
-	url = checkUrl(name, url)
+	checkUrl(&name, &url)
 	file = fmt.Sprintf("%s/%s", Dir, file)
 	Routes = append(Routes, route{name: name, method: GET, url: url, file: file})
 }
 
 // Route creates route controller when accessed at url by method will call callback
-func Route(name string, method HTTPMethod, url string, callback controllerFunc) {
-	url = checkUrl(name, url)
+func Route(name *string, method HTTPMethod, url *string, callback *controllerFunc) {
+	checkUrl(*&name, &*url)
 	for _, controller := range Controllers {
-		if controller.name == name {
+		if controller.name == *name {
 			Logf(BAD, "Fatal", "Failed to create route controller with name \"%s\", already exists", name)
 		}
 	}
 	for _, route := range Routes {
-		if route.name == name {
+		if route.name == *name {
 			Logf(BAD, "Fatal", "Failed to create route controller with name \"%s\", route \"%s\" already exists", name, route.name)
 		}
 	}
-	Controllers = append(Controllers, controller{name: name, method: method, url: url, callback: callback})
+	Controllers = append(Controllers, controller{name: *name, method: method, url: *url, callback: *callback})
 }
 
 // Get is an alias for Route
 func Get(name string, url string, callback controllerFunc) {
-	Route(name, GET, url, callback)
+	Route(&name, GET, &url, &callback)
 }
 
 // Post is an alias for Route
 func Post(name string, url string, callback controllerFunc) {
-	Route(name, POST, url, callback)
+	Route(&name, POST, &url, &callback)
 }
 
 // Put is an alias for Route
 func Put(name string, url string, callback controllerFunc) {
-	Route(name, PUT, url, callback)
+	Route(&name, PUT, &url, &callback)
 }
 
 // Patch is an alias for Route
 func Patch(name string, url string, callback controllerFunc) {
-	Route(name, PATCH, url, callback)
+	Route(&name, PATCH, &url, &callback)
 }
 
 // Delete is an alias for Route
 func Delete(name string, url string, callback controllerFunc) {
-	Route(name, DELETE, url, callback)
+	Route(&name, DELETE, &url, &callback)
 }
 
 // Redirect is a helper function to redirect to a new url or route by name
@@ -115,4 +116,17 @@ func RouteUrl(name string) string {
 		Logf(BAD, "Error", "Route %s does not exist", name)
 	}
 	return url
+}
+
+func checkUrl(route *string, url *string) {
+	if !strings.HasPrefix(*url, "/") {
+		Logf(FYI, "Notice", "Route \"%s\" URL should begin with a slash, added automatically.", *route, *url)
+		*url = "/" + *url
+	}
+	if *url != "/" && strings.HasSuffix(*url, "/") {
+		Logf(FYI, "Notice", "Route \"%s\" URL does not need a trailing slash: %s", *route, *url)
+	}
+	if strings.Contains(*url, ".") {
+		Logf(BAD, "Fatal", "Route \"%s\" URL contains a \".\" character: %s", *route, *url)
+	}
 }
