@@ -18,9 +18,10 @@ var path string
 
 // Init starts to listen and serve at port
 func Init(port string) {
+	port = fmt.Sprintf(":%s", port)
 	Logf(FYI, "Routes", "%v", Routes)
 	Logf(FYI, "Controllers", "%v", Controllers)
-	Logf(GOOD, "Ready", "Waiting for requests at http://localhost:%s.", port)
+	Logf(GOOD, "Ready", "Waiting for requests at http://localhost%s.", port)
 	go http.HandleFunc(Root, handler)
 	if err := http.ListenAndServe(port, nil); err != nil {
 		log.Fatal(err)
