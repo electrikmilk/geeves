@@ -1,6 +1,8 @@
 # Geeves
 
-A fast and light Go web framework. It allows you to write less boilerplate, especially as it relates to common server code.
+A simple Go web framework.
+
+My main focus was to allow the developer to write less boilerplate.
 
 ### Features
 
