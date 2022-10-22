@@ -1,5 +1,10 @@
 # Geeves
 
+<p>
+    <a href="https://pkg.go.dev/github.com/electrikmilk/geeves?tab=doc"><img src="https://godoc.org/github.com/golang/gddo?status.svg" alt="GoDoc"></a>
+    <a href="https://goreportcard.com/report/github.com/electrikmilk/geeves"><img src="https://goreportcard.com/badge/github.com/electrikmilk/geeves"/></a>
+</p>
+
 A simple Go web framework.
 
 My main focus was to allow the developer to write less boilerplate.
