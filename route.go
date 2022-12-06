@@ -3,7 +3,9 @@ package geeves
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
+	"text/template"
 )
 
 type HTTPMethod string
@@ -133,5 +135,38 @@ func checkUrl(route *string, url *string) {
 	}
 	if strings.Contains(*url, ".") {
 		Logf(BAD, "Fatal", "Route \"%s\" URL contains a \".\" character: %s", *route, *url)
+		panic("unable to create route: invalid route url")
+	}
+}
+
+type Todo struct {
+	Name        string
+	Description string
+}
+
+func Template(name string, data interface{}, file string, writer http.ResponseWriter) {
+	var staticFilePath = fmt.Sprintf("%s/%s", Dir, file)
+	if _, err := os.Stat(staticFilePath); os.IsNotExist(err) {
+		Logf(BAD, "Template", "File \"%s\" does not exist!", file)
+		serverError(writer)
+		return
+	}
+	var bytes, err = os.ReadFile(staticFilePath)
+	if err != nil {
+		Logf(BAD, "Template", "Unable to read file \"%s\"", file)
+		serverError(writer)
+		return
+	}
+	t, err := template.New(name).Parse(string(bytes))
+	if err != nil {
+		Logf(BAD, "Template", "Failed to parse template \"%s\"", file)
+		serverError(writer)
+		return
+	}
+	writer.Header().Set("Content-Type", "text/html")
+	err = t.Execute(writer, data)
+	if err != nil {
+		Logf(BAD, "Template", "Failed to execute template \"%s\"", file)
+		serverError(writer)
 	}
 }
