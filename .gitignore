@@ -20,4 +20,5 @@ go.work
 # Other
 /.idea/
 .DS_Store
+/test/
 

@@ -3,9 +3,9 @@ package geeves
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"runtime"
+	"time"
 )
 
 type Pigment string
@@ -60,14 +60,11 @@ func Log(logType ServerLog, label string, str string) {
 // Logf outputs the resulting string with the label and in the color that corresponds to the type
 func Logf(logType ServerLog, label string, str string, vars ...interface{}) {
 	generateLog(&logType, &label, &str)
-	if logType == 3 {
-		log.Fatalf(str, vars...)
-	}
 	fmt.Printf(str, vars...)
 }
 
 func generateLog(logtype *ServerLog, label *string, str *string) {
-	*str = fmt.Sprintf("[%s] %s\n", *label, *str)
+	*str = fmt.Sprintf("[%s] (%s) %s\n", time.Now(), *label, *str)
 	switch *logtype {
 	case 0:
 		*str = Color(*str, BLUE)
@@ -101,15 +98,23 @@ func Jprint(writer http.ResponseWriter, content any) {
 
 // Eprint encodes the string in encoding and writes it to writer
 func Eprint(writer http.ResponseWriter, encoding Encoding, content string) {
-	var ContentType string = fmt.Sprintf("%s; charset=utf-8", encoding)
-	writer.Header().Set("Content-Type", ContentType)
+	var contentType = fmt.Sprintf("%s; charset=utf-8", encoding)
+	writer.Header().Set("Content-Type", contentType)
 	fmt.Fprint(writer, content)
 }
 
 // Eprintf encodes the resulting string in encoding and writes it to writer
 func Eprintf(writer http.ResponseWriter, encoding Encoding, content string, vars ...interface{}) {
-	var ContentType string = fmt.Sprintf("%s; charset=utf-8", encoding)
+	var contentType = fmt.Sprintf("%s; charset=utf-8", encoding)
 	content = fmt.Sprintf(content, vars...)
-	writer.Header().Set("Content-Type", ContentType)
+	writer.Header().Set("Content-Type", contentType)
 	fmt.Fprint(writer, content)
+}
+
+func notFound(writer http.ResponseWriter) {
+	http.Error(writer, "404 Not Found.", http.StatusNotFound)
+}
+
+func serverError(writer http.ResponseWriter) {
+	http.Error(writer, "500 Internal Server Error.", http.StatusInternalServerError)
 }

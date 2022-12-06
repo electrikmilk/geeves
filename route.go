@@ -40,11 +40,13 @@ func Static(name string, url string, file string) {
 	for _, route := range Routes {
 		if route.name == name {
 			Logf(BAD, "Fatal", "Failed to create route with name \"%s\", already exists", name)
+			panic("unable to create route")
 		}
 	}
 	for _, controller := range Controllers {
 		if controller.name == name {
 			Logf(BAD, "Fatal", "Failed to create route with name \"%s\", controller \"%s\" already exists", name, controller.name)
+			panic("unable to create route")
 		}
 	}
 	checkUrl(&name, &url)
@@ -58,11 +60,13 @@ func Route(name *string, method HTTPMethod, url *string, callback *controllerFun
 	for _, controller := range Controllers {
 		if controller.name == *name {
 			Logf(BAD, "Fatal", "Failed to create route controller with name \"%s\", already exists", name)
+			panic("unable to create controller")
 		}
 	}
 	for _, route := range Routes {
 		if route.name == *name {
 			Logf(BAD, "Fatal", "Failed to create route controller with name \"%s\", route \"%s\" already exists", name, route.name)
+			panic("unable to create controller")
 		}
 	}
 	Controllers = append(Controllers, controller{name: *name, method: method, url: *url, callback: *callback})
@@ -114,6 +118,7 @@ func RouteUrl(name string) string {
 	}
 	if url == "" {
 		Logf(BAD, "Error", "Route %s does not exist", name)
+		panic("route does not exist")
 	}
 	return url
 }
