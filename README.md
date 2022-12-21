@@ -11,16 +11,12 @@ My main focus was to allow the developer to write less boilerplate.
 
 ### Features
 
-- [x] Serve static files
-- [x] Create routes at a specific url and request method and serve a file in response.
-- [x] Create a route controller and process the request and write a response by serving a file, redirecting or directly outputting something.
-- [x] Helper functions for outputting in web specific encoding formats (HTML, JSON, XML).
-- [x] Helper functions for standard logging (info, warning, success, error) in a similar format and corresponding colors. You can also format a string to be outputted in one of the defined colors alternatively.
-
-### Missing
-
-- [ ] Database abstraction (Model/ORM)
-- [ ] View templates
+- Serve static files
+- Create routes at a specific url and request method and serve a file in response.
+- Create a route controller and process the request and write a response by serving a file, redirecting or directly outputting something.
+- Helper functions for outputting in web specific encoding formats (HTML, JSON, XML).
+- Helper functions for standard logging (info, warning, success, error) in a similar format and corresponding colors. You can also format a string to be outputted in one of the defined colors 
+- View templates
 
 ## Usage
 
