@@ -139,11 +139,8 @@ func checkUrl(route *string, url *string) {
 	}
 }
 
-type Todo struct {
-	Name        string
-	Description string
-}
-
+// Template uses Go's template feature to replace the html in `file` with `data`.
+// The output is written to `writer`.
 func Template(name string, data interface{}, file string, writer http.ResponseWriter) {
 	var staticFilePath = fmt.Sprintf("%s/%s", Dir, file)
 	if _, err := os.Stat(staticFilePath); os.IsNotExist(err) {
