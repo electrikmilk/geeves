@@ -2,9 +2,7 @@ package geeves
 
 import (
 	"net/http"
-	"os"
 	"testing"
-	"time"
 )
 
 type TemplateData struct {
@@ -22,6 +20,4 @@ func TestServer(t *testing.T) {
 		Template("template", data, "template.html", writer)
 	})
 	Init(3000)
-	time.Sleep(time.Second * 5)
-	os.Exit(0)
 }
