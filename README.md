@@ -5,9 +5,7 @@
     <a href="https://goreportcard.com/report/github.com/electrikmilk/geeves"><img src="https://goreportcard.com/badge/github.com/electrikmilk/geeves"/></a>
 </p>
 
-A simple Go web framework.
-
-My main focus was to allow the developer to write less boilerplate.
+Go web framework
 
 ### Features
 
