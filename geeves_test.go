@@ -2,6 +2,7 @@ package geeves
 
 import (
 	"net/http"
+	"os"
 	"testing"
 	"time"
 )
@@ -22,4 +23,5 @@ func TestServer(t *testing.T) {
 	})
 	Init(3000)
 	time.Sleep(time.Second * 5)
+	os.Exit(0)
 }
